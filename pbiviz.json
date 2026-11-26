@@ -1,0 +1,27 @@
+{
+  "visual": {
+    "name": "codexAnnotatedTrend",
+    "displayName": "Codex Annotated Trend",
+    "guid": "codexAnnotatedTrend7D9443D87145425494BF5AC70F5A1ED7",
+    "visualClassName": "Visual",
+    "version": "1.0.0.0",
+    "description": "A trend line or column series with event notes (launches, outages, price changes) pinned to their dates, laid out so no note is ever cut by a leader, another note or the line.",
+    "supportUrl": "https://nexuscodex.nexus/support",
+    "gitHubUrl": ""
+  },
+  "apiVersion": "5.11.2",
+  "author": {
+    "name": "Nexus Codex",
+    "email": "harmsolo@nexuscodex.nexus"
+  },
+  "assets": {
+    "icon": "assets/icon.png"
+  },
+  "externalJS": null,
+  "style": "style/visual.less",
+  "capabilities": "capabilities.json",
+  "stringResources": [
+    "stringResources/en-US/resources.resjson"
+  ],
+  "version": "1.0.0.0"
+}

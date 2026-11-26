@@ -1,0 +1,619 @@
+{
+  "dataRoles": [
+    {
+      "name": "axis",
+      "displayName": "Axis",
+      "displayNameKey": "Role_Axis",
+      "kind": "Grouping",
+      "description": "Date or ordered category, one point per row (e.g. Date[Date] or Date[Month])",
+      "descriptionKey": "Role_Axis_Desc"
+    },
+    {
+      "name": "values",
+      "displayName": "Values",
+      "displayNameKey": "Role_Values",
+      "kind": "Measure",
+      "description": "The trend measure (e.g. Daily releases)",
+      "descriptionKey": "Role_Values_Desc"
+    },
+    {
+      "name": "eventNote",
+      "displayName": "Event note",
+      "displayNameKey": "Role_EventNote",
+      "kind": "Measure",
+      "description": "Text measure, blank on rows without an event, e.g. CONCATENATEX(VALUES(Events[Note]), Events[Note], \" · \")",
+      "descriptionKey": "Role_EventNote_Desc"
+    },
+    {
+      "name": "eventType",
+      "displayName": "Event type",
+      "displayNameKey": "Role_EventType",
+      "kind": "Measure",
+      "description": "Optional text measure (e.g. Launch, Outage, Price change), shown in the tooltip",
+      "descriptionKey": "Role_EventType_Desc"
+    },
+    {
+      "name": "eventPriority",
+      "displayName": "Note priority",
+      "displayNameKey": "Role_EventPriority",
+      "kind": "Measure",
+      "description": "Optional number: when notes do not all fit, higher priority keeps its note first",
+      "descriptionKey": "Role_EventPriority_Desc"
+    },
+    {
+      "name": "tooltips",
+      "displayName": "Tooltips",
+      "displayNameKey": "Role_Tooltips",
+      "kind": "Measure",
+      "description": "Extra fields shown in the hover tooltip",
+      "descriptionKey": "Role_Tooltips_Desc"
+    }
+  ],
+  "dataViewMappings": [
+    {
+      "conditions": [
+        {
+          "axis": {
+            "max": 1
+          },
+          "values": {
+            "max": 1
+          },
+          "eventNote": {
+            "max": 1
+          },
+          "eventType": {
+            "max": 1
+          },
+          "eventPriority": {
+            "max": 1
+          }
+        }
+      ],
+      "categorical": {
+        "categories": {
+          "for": {
+            "in": "axis"
+          },
+          "dataReductionAlgorithm": {
+            "top": {
+              "count": 30000
+            }
+          }
+        },
+        "values": {
+          "select": [
+            {
+              "for": {
+                "in": "values"
+              }
+            },
+            {
+              "for": {
+                "in": "eventNote"
+              }
+            },
+            {
+              "for": {
+                "in": "eventType"
+              }
+            },
+            {
+              "for": {
+                "in": "eventPriority"
+              }
+            },
+            {
+              "for": {
+                "in": "tooltips"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "objects": {
+    "annotations": {
+      "displayName": "Event notes",
+      "displayNameKey": "Annotations_Card",
+      "properties": {
+        "style": {
+          "displayName": "Note style",
+          "displayNameKey": "Annotations_Style",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Leader-line labels",
+                "displayNameKey": "Style_Leader",
+                "value": "leader"
+              },
+              {
+                "displayName": "Callout cards",
+                "displayNameKey": "Style_Callout",
+                "value": "callout"
+              },
+              {
+                "displayName": "Numbered pins",
+                "displayNameKey": "Style_Pins",
+                "value": "pins"
+              }
+            ]
+          }
+        },
+        "eventColor": {
+          "displayName": "Marker colour",
+          "displayNameKey": "Annotations_EventColor",
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "noteFontFamily": {
+          "displayName": "Font family",
+          "displayNameKey": "Annotations_FontFamily",
+          "type": {
+            "formatting": {
+              "fontFamily": true
+            }
+          }
+        },
+        "noteFontSize": {
+          "displayName": "Font size",
+          "displayNameKey": "Annotations_FontSize",
+          "type": {
+            "formatting": {
+              "fontSize": true
+            }
+          }
+        },
+        "noteBold": {
+          "displayName": "Bold",
+          "displayNameKey": "Annotations_Bold",
+          "type": {
+            "bool": true
+          }
+        },
+        "noteItalic": {
+          "displayName": "Italic",
+          "displayNameKey": "Annotations_Italic",
+          "type": {
+            "bool": true
+          }
+        },
+        "noteColor": {
+          "displayName": "Note text colour",
+          "displayNameKey": "Annotations_NoteColor",
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "showDate": {
+          "displayName": "Show date in note",
+          "displayNameKey": "Annotations_ShowDate",
+          "type": {
+            "bool": true
+          }
+        },
+        "keep": {
+          "displayName": "When notes don't fit, keep",
+          "displayNameKey": "Annotations_Keep",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Latest first",
+                "displayNameKey": "Keep_Latest",
+                "value": "latest"
+              },
+              {
+                "displayName": "Earliest first",
+                "displayNameKey": "Keep_Earliest",
+                "value": "earliest"
+              },
+              {
+                "displayName": "Largest value first",
+                "displayNameKey": "Keep_Largest",
+                "value": "largest"
+              }
+            ]
+          }
+        },
+        "maxNotes": {
+          "displayName": "Maximum notes (0 = as many as fit)",
+          "displayNameKey": "Annotations_MaxNotes",
+          "type": {
+            "numeric": true
+          }
+        },
+        "labelDensity": {
+          "displayName": "Label density",
+          "displayNameKey": "Annotations_LabelDensity",
+          "description": "How many notes to try to place, as a percentage. 100 places every note that fits without overlapping anything; 0 places only the most important note. Notes left out are counted in \"+N more notes\".",
+          "descriptionKey": "Annotations_LabelDensity_Description",
+          "type": {
+            "numeric": true
+          }
+        }
+      }
+    },
+    "series": {
+      "displayName": "Series",
+      "displayNameKey": "Series_Card",
+      "properties": {
+        "mark": {
+          "displayName": "Mark",
+          "displayNameKey": "Series_Mark",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Auto (area with labels and cards, columns with pins)",
+                "displayNameKey": "Mark_Auto",
+                "value": "auto"
+              },
+              {
+                "displayName": "Line",
+                "displayNameKey": "Mark_Line",
+                "value": "line"
+              },
+              {
+                "displayName": "Line and area",
+                "displayNameKey": "Mark_Area",
+                "value": "area"
+              },
+              {
+                "displayName": "Columns",
+                "displayNameKey": "Mark_Columns",
+                "value": "columns"
+              }
+            ]
+          }
+        },
+        "startAtZero": {
+          "displayName": "Start at zero",
+          "displayNameKey": "Series_StartAtZero",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Auto (on for area and columns, off for a line)",
+                "displayNameKey": "Zero_Auto",
+                "value": "auto"
+              },
+              {
+                "displayName": "On",
+                "displayNameKey": "Zero_On",
+                "value": "on"
+              },
+              {
+                "displayName": "Off",
+                "displayNameKey": "Zero_Off",
+                "value": "off"
+              }
+            ]
+          }
+        },
+        "lineColor": {
+          "displayName": "Series colour",
+          "displayNameKey": "Series_LineColor",
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "lineWidth": {
+          "displayName": "Line width",
+          "displayNameKey": "Series_LineWidth",
+          "type": {
+            "numeric": true
+          }
+        },
+        "lastInProgress": {
+          "displayName": "Last point is in progress",
+          "displayNameKey": "Series_LastInProgress",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Auto (when the last period contains today)",
+                "displayNameKey": "Progress_Auto",
+                "value": "auto"
+              },
+              {
+                "displayName": "On",
+                "displayNameKey": "Progress_On",
+                "value": "on"
+              },
+              {
+                "displayName": "Off",
+                "displayNameKey": "Progress_Off",
+                "value": "off"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "axes": {
+      "displayName": "Axes",
+      "displayNameKey": "Axes_Card",
+      "properties": {
+        "showX": {
+          "displayName": "Date labels",
+          "displayNameKey": "Axes_ShowX",
+          "type": {
+            "bool": true
+          }
+        },
+        "showY": {
+          "displayName": "Value axis",
+          "displayNameKey": "Axes_ShowY",
+          "type": {
+            "bool": true
+          }
+        },
+        "axisFontSize": {
+          "displayName": "Font size",
+          "displayNameKey": "Axes_FontSize",
+          "type": {
+            "formatting": {
+              "fontSize": true
+            }
+          }
+        },
+        "axisColor": {
+          "displayName": "Label colour",
+          "displayNameKey": "Axes_Color",
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "codexTheme": {
+      "displayName": "Nexus Codex Theme",
+      "properties": {
+        "mode": {
+          "displayName": "Mode",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Automatic",
+                "value": "auto"
+              },
+              {
+                "displayName": "Dark",
+                "value": "dark"
+              },
+              {
+                "displayName": "Light",
+                "value": "light"
+              },
+              {
+                "displayName": "Neon",
+                "value": "neon"
+              }
+            ]
+          },
+          "description": "Automatic follows your Background colour; Dark and Light force the Codex look. 'neon' is retired and reads as Dark + Neon Glow."
+        },
+        "surfaceTransparency": {
+          "displayName": "Surface Transparency",
+          "type": {
+            "numeric": true
+          }
+        },
+        "neon": {
+          "displayName": "Neon Glow",
+          "type": {
+            "bool": true
+          }
+        },
+        "neonColor": {
+          "displayName": "Flare Colour",
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "neonScope": {
+          "displayName": "Neon Applies To",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Flare colour only",
+                "value": "flare"
+              },
+              {
+                "displayName": "All selected colours",
+                "value": "all"
+              }
+            ]
+          }
+        },
+        "glowStrength": {
+          "displayName": "Glow Strength",
+          "type": {
+            "numeric": true
+          }
+        }
+      }
+    },
+    "background": {
+      "displayName": "Background",
+      "properties": {
+        "show": {
+          "displayName": "Show background",
+          "displayNameKey": "Background_Show",
+          "type": {
+            "bool": true
+          }
+        },
+        "backgroundColor": {
+          "displayName": "Background Colour",
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "transparency": {
+          "displayName": "Transparency",
+          "type": {
+            "numeric": true
+          }
+        }
+      }
+    },
+    "titleSettings": {
+      "displayName": "Visual Title",
+      "properties": {
+        "showTitle": {
+          "displayName": "Show Title",
+          "type": {
+            "bool": true
+          }
+        },
+        "titleText": {
+          "displayName": "Title Text",
+          "type": {
+            "text": true
+          }
+        },
+        "titleFontFamily": {
+          "displayName": "Font Family",
+          "type": {
+            "formatting": {
+              "fontFamily": true
+            }
+          }
+        },
+        "titleFontSize": {
+          "displayName": "Font Size",
+          "type": {
+            "formatting": {
+              "fontSize": true
+            }
+          }
+        },
+        "titleBold": {
+          "displayName": "Bold",
+          "type": {
+            "bool": true
+          }
+        },
+        "titleItalic": {
+          "displayName": "Italic",
+          "type": {
+            "bool": true
+          }
+        },
+        "titleUnderline": {
+          "displayName": "Underline",
+          "type": {
+            "bool": true
+          }
+        },
+        "titleAlign": {
+          "displayName": "Alignment",
+          "type": {
+            "formatting": {
+              "alignment": true
+            }
+          }
+        },
+        "titleColor": {
+          "displayName": "Font Color",
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "contentPadding": {
+      "displayName": "Content padding",
+      "displayNameKey": "ContentPadding_Card",
+      "properties": {
+        "top": {
+          "displayName": "Top",
+          "displayNameKey": "ContentPadding_Top",
+          "description": "Space between the visual's edge and its content (top side, px, 0 to 64)",
+          "type": {
+            "numeric": true
+          }
+        },
+        "right": {
+          "displayName": "Right",
+          "displayNameKey": "ContentPadding_Right",
+          "description": "Space between the visual's edge and its content (right side, px, 0 to 64)",
+          "type": {
+            "numeric": true
+          }
+        },
+        "bottom": {
+          "displayName": "Bottom",
+          "displayNameKey": "ContentPadding_Bottom",
+          "description": "Space between the visual's edge and its content (bottom side, px, 0 to 64)",
+          "type": {
+            "numeric": true
+          }
+        },
+        "left": {
+          "displayName": "Left",
+          "displayNameKey": "ContentPadding_Left",
+          "description": "Space between the visual's edge and its content (left side, px, 0 to 64)",
+          "type": {
+            "numeric": true
+          }
+        }
+      }
+    },
+    "licence": {
+      "displayName": "Licence",
+      "properties": {
+        "key": {
+          "displayName": "Suite key",
+          "type": {
+            "text": true
+          }
+        }
+      }
+    }
+  },
+  "supportsHighlight": false,
+  "supportsKeyboardFocus": true,
+  "supportsLandingPage": true,
+  "supportsEmptyDataView": true,
+  "supportsMultiVisualSelection": true,
+  "tooltips": {
+    "supportedTypes": {
+      "default": true,
+      "canvas": true
+    },
+    "roles": [
+      "tooltips"
+    ]
+  },
+  "privileges": [],
+  "suppressDefaultTitle": true
+}
